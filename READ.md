@@ -1,18 +1,23 @@
-# Video Stream with Continuous Input using Streamlit
+# Streamlit Video Analyzer
 
-This project provides a real-time video streaming application built with Streamlit, utilizing YOLO for object detection, pose estimation, and segmentation models. The app supports various video sources, including webcams, RTSP streams, and uploaded videos, with an intuitive sidebar for settings adjustments.
+This repository hosts a real-time video streaming and analysis app using Streamlit and YOLO. The app provides options for live video streams from various sources, and integrates YOLO for real-time object detection, pose estimation, and segmentation.
 
-## Features
+## Table of Contents
 
-- **Real-time Video Streaming**: Capture video from various sources such as webcam, RTSP streams, or video files.
-- **Dynamic Model Loading**: Choose and load pre-trained models for object detection, pose estimation, or segmentation.
-- **Adjustable Settings**: Configure video source, model type, resolution, and confidence threshold directly in the UI.
-- **Image Capture**: Option to grab and save frames during the video stream.
-- **Text Input**: Interactive text inputs for automated notes and prompt entries during streaming.
 
-## Demo
+- [Installation](#installation)
+- [Usage](#usage)
+- [Directory Structure](#directory-structure)
+- [Scripts Overview](#scripts-overview)
+- [Link to dataset](#Link-to-dataset)
 
-<img src="path/to/demo.gif" alt="Demo GIF" width="700"/>
+## Installation
+1. Clone the repository:
+
+    ```bash
+  git clone https://github.com/username/Streamlit-Video-Analyzer.git
+  cd Streamlit-Video-Analyzer
+  ```
 
 ## Setup
 
