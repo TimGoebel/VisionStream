@@ -9,7 +9,6 @@ This repository hosts a real-time video streaming and analysis app using Streaml
 - [Usage](#usage)
 - [Directory Structure](#directory-structure)
 - [Scripts Overview](#scripts-overview)
-- [Link to dataset](#Link-to-dataset)
 
 ## Installation
 1. Clone the repository:
