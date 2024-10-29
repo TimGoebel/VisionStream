@@ -1,0 +1,13 @@
+numpy==1.21.6
+streamlit==1.37.1
+ultralytics==8.1.24
+cvzone==1.6.1
+opencv-python==4.7.0.72
+opencv-python-headless==4.9.0.80
+pyrealsense2==2.54.2.5684
+onnx==1.13.0
+onnx-graphsurgeon==0.3.12
+onnxruntime==1.13.1
+onnxsim==0.4.33
+torch==2.1.0a0+41361538.nv23.6
+torchvision==0.16.1
