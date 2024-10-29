@@ -19,59 +19,58 @@ This repository hosts a real-time video streaming and analysis app using Streaml
   cd Streamlit-Video-Analyzer
   ```
 
-## Setup
 
-### Prerequisites
+2. Install the required Python packages:
 
-- Python 3.8+
-- Install required packages using the provided `requirements.txt`
+  ```bash
+  pip install -r requirements.txt
+  ```
+## Usage
+To start the app, ensure that you have the correct model files and video sources. You can run the app as follows:
 
+### Running the Pipeline
+
+Execute the following command to start the pipeline:
 ```bash
-pip install -r requirements.txt
+python streamlit run main.py
+```
 
-Installation
-Clone the repository:
+### Arguments
 
-git clone https://github.com/yourusername/video-streaming-app.git
-cd video-streaming-app
+- `source`: Select a video source from `webcam`, `video files`, or `RTSP stream`.
+- `model_type` : Choose the model type for video analysis, including `object detection`, `pose estimation`, or `segmentation`.
 
-
-Set up the necessary models and video sources. Follow instructions in the Configuration section below.
-
-Configuration
-YOLO Models: Pre-trained YOLO models can be downloaded from Ultralytics YOLO repository.
-RTSP Stream URL: Ensure the RTSP stream URL is accessible for your network.
-
-Usage
-Run the application with the following command:
-streamlit run app.py
-
-
-Available Settings
-Video Source: Select from options like d435, web, video, and RTSP.
-Model Source: Choose between none, object_detection, pose_estimation, or segmentation.
-Resolution: Adjust the width and height of the video stream.
-Confidence Threshold: Set the threshold level for detection confidence.
-Capturing Images
-To grab an image during video streaming, press the "Grab Image" button. The image will be saved temporarily, and a preview will be shown in the app.
-
-Directory Structure
-project-root/
+## Directory Structure
+The project’s directory structure is as follows:
+```
+Streamlit-Video-Analyzer/
 │
 ├── camera/
 │   ├── capture_video.py
 │   ├── capture_video_d.py
 │   └── ...
 ├── models/
-│   ├── yolov5s.pt (sample model)
+│   ├── yolov8.pt
+│   ├── pose_estimationv8.pt
+│   ├── Segmentationv8.pt
 │   └── ...
 ├── app.py
-└── requirements.txt
+├── requirements.txt
+└── README.md
+```
 
+## Scripts Overview
+- **`main.py`: The main script that starts the Streamlit app and loads the interface.
+- **`capture_video.py`: Contains the function to capture video from standard sources.
+- **`capture_video_d.py`: Contains the function to capture video from a specific camera type (e.g., Depth Camera).
+- **`draw.py`: draws the inferencing.
+- **`models/': Directory for storing pre-trained YOLO models.
+- **`classes/': Directory for storing text files of classes.
 
+## Scripts Overview
 
-Acknowledgments
-Streamlit for building an amazing interactive web app framework.
-Ultralytics YOLO for their powerful object detection models.
-OpenCV for video processing and image capture utilities.
-
+- **`Video Source`: Choose between webcam, RTSP stream, and video files.
+- **`Model Type`: Select the type of analysis model (Object Detection, Pose Estimation, or Segmentation).
+- **`Resolution`: Customize resolution for the video stream.
+- **`Confidence Threshold`: Set a confidence threshold for the model predictions.
+- **`Classes`: Select the class text file
