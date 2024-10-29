@@ -24,8 +24,12 @@ This project provides a real-time video streaming application built with Streaml
 ```bash
 pip install -r requirements.txt
 
+Installation
+Clone the repository:
+
 git clone https://github.com/yourusername/video-streaming-app.git
 cd video-streaming-app
+
 
 Set up the necessary models and video sources. Follow instructions in the Configuration section below.
 
@@ -33,7 +37,10 @@ Configuration
 YOLO Models: Pre-trained YOLO models can be downloaded from Ultralytics YOLO repository.
 RTSP Stream URL: Ensure the RTSP stream URL is accessible for your network.
 
+Usage
+Run the application with the following command:
 streamlit run app.py
+
 
 Available Settings
 Video Source: Select from options like d435, web, video, and RTSP.
@@ -44,7 +51,6 @@ Capturing Images
 To grab an image during video streaming, press the "Grab Image" button. The image will be saved temporarily, and a preview will be shown in the app.
 
 Directory Structure
-
 project-root/
 │
 ├── camera/
@@ -56,6 +62,7 @@ project-root/
 │   └── ...
 ├── app.py
 └── requirements.txt
+
 
 
 Acknowledgments
