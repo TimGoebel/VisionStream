@@ -1,9 +1,11 @@
 # camera.py
 import cv2
+import os
 import streamlit as st
 import concurrent.futures
 from ultralytics import YOLO
 from drawing import process_objects1
+from datetime import datetime  # Import datetime
 
 # Replace these with appropriate values or constants from your original code
 FONT = cv2.FONT_HERSHEY_SIMPLEX
@@ -28,7 +30,7 @@ def object_detection_worker(args):
     
     return detected_objects, color_image
 
-def capture_video(source, width, height, model_type, model=None, classnames=None, confid_threshold=0.5):
+def capture_video(source, width, height, model_type, model=None, classnames=None, confid_threshold=0.5,save_path=None):
     # Your function implementation here
     cap = cv2.VideoCapture(source)
     stframe = st.empty()
@@ -57,7 +59,15 @@ def capture_video(source, width, height, model_type, model=None, classnames=None
 
         stframe.image(frame, channels="RGB")
 
-
+        # Save the frame if the button was pressed
+        if st.session_state.grab_image_flag:
+            if save_path:  # Check if save_path is provided
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                img_path = os.path.join(save_path, "grabbed_image.png")
+                img_path = os.path.join(save_path, f"grabbed_image_{timestamp}.png")
+                cv2.imwrite(img_path, cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+                st.success(f"Image saved at: {img_path}")  # Notify user
+            st.session_state.grab_image_flag = False
 
     cap.release()
     executor.shutdown()

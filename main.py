@@ -1,3 +1,4 @@
+# main.py
 import streamlit as st
 import tempfile
 import os
@@ -17,20 +18,24 @@ class VideoSettings:
         self.model_type = 'none'
         self.selected_source = 'web'
         self.rtsp_url = ''
+        self.save_path = ""  # Initialize save_path here
+        self.save_path_options = list(filter(lambda x: os.path.isdir(x), [os.path.join(os.getcwd(), d) for d in os.listdir(os.getcwd())]))
     
     def display_sidebar(self):
         st.sidebar.header("Settings")
         self.selected_source = st.sidebar.selectbox("Video Source", self.options_video)
-        st.sidebar.write(f"Source Selected: {self.selected_source}")
+        # st.sidebar.write(f"Source Selected: {self.selected_source}")
         
         self.model_type = st.sidebar.selectbox("Model Source", self.type_model)
-        st.sidebar.write(f"Model Selected: {self.model_type}")
+        # st.sidebar.write(f"Model Selected: {self.model_type}")
 
         self.width = st.sidebar.number_input("Resolution Width", min_value=100, max_value=4096, value=self.width)
         self.height = st.sidebar.number_input("Resolution Height", min_value=100, max_value=4096, value=self.height)
 
         self.confidence_threshold = st.sidebar.slider("Confidence Threshold", min_value=0.0, max_value=1.0, value=self.confidence_threshold, step=0.01)
-        st.sidebar.write(f"Confidence Threshold: {self.confidence_threshold}")
+        # st.sidebar.write(f"Confidence Threshold: {self.confidence_threshold}")
+        self.save_path = st.sidebar.selectbox("Select Image Save Path", self.save_path_options)
+
 
     def get_video_source(self):
         if self.selected_source == 'video':
@@ -82,15 +87,22 @@ class App:
     def __init__(self):
         self.video_settings = VideoSettings()
         self.model_loader = ModelLoader()
-        self.video_placeholder = st.empty()
-        self.grabbed_frame = None
-    
+        # self.video_placeholder = st.empty()
+
+        # Initialize session state for grabbing image and streaming
+        if "grab_image_flag" not in st.session_state:
+            st.session_state.grab_image_flag = False
+        # if "img_path" not in st.session_state:
+        #     st.session_state.img_path = None
+        if "is_streaming" not in st.session_state:
+            st.session_state.is_streaming = False
+
     def run(self):
         st.title("Video Stream with Continuous Input")
         self.add_custom_css()
         self.video_settings.display_sidebar()
         self.model_loader.load_model_and_labels(self.video_settings.model_type)
-        self.start_streaming()
+        self.start_streaming_controls()
 
     def add_custom_css(self):
         st.markdown("""
@@ -100,40 +112,33 @@ class App:
         }
         </style>
         """, unsafe_allow_html=True)
-    
-    def start_streaming(self):
+
+    def start_streaming_controls(self):
         col1, col2 = st.columns(2)
-        start_video = col1.button("Start Video")
-        grab_image = col2.button("Grab Image")
-        
-        if start_video:
+        if col1.button("Start Video"):
+            st.session_state.is_streaming = True
+        if col2.button("Grab Image"):
+            st.session_state.grab_image_flag = True
+
+        if st.session_state.is_streaming:
             source = self.video_settings.get_video_source()
-            self.stream_video(source, grab_image)
+            self.stream_video(source)
+        
 
-    def stream_video(self, source, grab_image):
-        while True:
-            if self.video_settings.selected_source == 'd435':
-                frame = capture_video_d(source, self.video_settings.width, self.video_settings.height, self.video_settings.model_type, self.model_loader.model, self.model_loader.classnames, self.video_settings.confidence_threshold)
-            else:
-                frame = capture_video(source, self.video_settings.width, self.video_settings.height, self.video_settings.model_type, self.model_loader.model, self.model_loader.classnames, self.video_settings.confidence_threshold)
-
-            if frame is not None:
-                self.video_placeholder.image(frame, channels="RGB")
+    def stream_video(self, source):
+        # Capture video frame based on selected source
+        if self.video_settings.selected_source == 'd435':
+            frame = capture_video_d(source, self.video_settings.width, self.video_settings.height, 
+                                    self.video_settings.model_type, self.model_loader.model, 
+                                    self.model_loader.classnames, self.video_settings.confidence_threshold)
             
-            if grab_image:
-                self.grabbed_frame = frame
-                break
-            
-            st.experimental_rerun()
-
-        if self.grabbed_frame is not None:
-            img_path = os.path.join(tempfile.gettempdir(), "grabbed_image.png")
-            cv2.imwrite(img_path, cv2.cvtColor(self.grabbed_frame, cv2.COLOR_RGB2BGR))
-            st.image(self.grabbed_frame, caption="Grabbed Frame")
-            st.success(f"Image saved at: {img_path}")
-
+        else:
+            frame = capture_video(source, self.video_settings.width, self.video_settings.height, 
+                                  self.video_settings.model_type, self.model_loader.model, 
+                                  self.model_loader.classnames, self.video_settings.confidence_threshold,
+                                  self.video_settings.save_path)
+ 
 
 if __name__ == "__main__":
     app = App()
     app.run()
-
