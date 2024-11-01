@@ -52,8 +52,13 @@ Streamlit-Video-Analyzer/
 │   ├── yolov8.pt
 │   ├── pose_estimationv8.pt
 │   ├── Segmentationv8.pt
+│
+├── class/
+│   ├── labels.txt
 │   └── ...
-├── app.py
+├── main.py
+├── read_json.py
+├── prompt.json
 ├── requirements.txt
 └── README.md
 ```
@@ -63,12 +68,15 @@ Streamlit-Video-Analyzer/
 - **`capture_video.py`: Contains the function to capture video from standard sources.
 - **`capture_video_d.py`: Contains the function to capture video from a specific camera type (e.g., Depth Camera).
 - **`draw.py`: draws the inferencing.
+- **`read_json.py`: reads in json and over writes two locations
+- **`prompt.json`: is the prompt
 - **`models/': Directory for storing pre-trained YOLO models.
 - **`classes/': Directory for storing text files of classes.
 
 ## Scripts Overview
 
 - **`Video Source`: Choose between webcam, RTSP stream, and video files.
+- **`image`: saves image to a direstor
 - **`Model Type`: Select the type of analysis model (Object Detection, Pose Estimation, or Segmentation).
 - **`Resolution`: Customize resolution for the video stream.
 - **`Confidence Threshold`: Set a confidence threshold for the model predictions.
