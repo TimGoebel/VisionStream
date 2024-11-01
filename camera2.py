@@ -6,6 +6,8 @@ from ultralytics import YOLO
 import concurrent.futures
 import streamlit as st
 from datetime import datetime  # Import datetime
+from read_json import generate_report
+
 
 
 # Replace these with appropriate values or constants from your original code
@@ -112,6 +114,15 @@ def capture_video_d(source, width, height, model_type, model=None, classnames=No
             combine[:, :width, :] = color_image
             combine[:, width:, :] = depth_image
 
+            # Update detected objects in the placeholderst.session_state["job_function"]
+            if detected_objects:  # Check if there are any detected objects
+                detection_info = detected_objects[0]
+                positions = [det[-1] for det in detection_info]
+                position_string = ', '.join(positions)  # Join list into a comma-separated string
+                detected_objects_placeholder.write(f"<b style='color: red;'>Detected objects: {position_string}</b>", unsafe_allow_html=True)
+            else:
+                detected_objects_placeholder.write("Detected objects: No objects detected")
+
             # combined_image = np.hstack((color_image, depth_image))
             # cv2.imshow('RGB and Depth', combine)
             
@@ -126,6 +137,12 @@ def capture_video_d(source, width, height, model_type, model=None, classnames=No
                     cv2.imwrite(img_path, cv2.cvtColor(combine, cv2.COLOR_RGB2BGR))
                     st.success(f"Image saved at: {img_path}")  # Notify user
                 st.session_state.grab_image_flag = False
+            # Save the frame if the grab image flag is set
+            if st.session_state.get("prompt_flag", False):
+                job_function = st.session_state.get("job_function", "Not Selected")
+                report = generate_report(job_function, position_string)
+                st.write(f"<b style='color: red;'>Generate a detection report based on the following detected objects: {report}</b>", unsafe_allow_html=True)
+                st.session_state.prompt_flag = False
 
             if cv2.waitKey(1) == ord('q'):
                 break
