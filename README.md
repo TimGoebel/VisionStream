@@ -31,7 +31,7 @@ To start the app, ensure that you have the correct model files and video sources
 
 Execute the following command to start the pipeline:
 ```bash
-python streamlit run main.py
+streamlit run main.py
 ```
 
 ### Arguments
